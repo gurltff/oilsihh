@@ -6,3 +6,4 @@ frontend/dist/
 backend/data/*.db
 .pytest_cache/
 *.tsbuildinfo
+frontend/public/data/

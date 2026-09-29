@@ -30,7 +30,7 @@ export default function DocModal({ doc, onClose }: { doc: DocRef | null; onClose
       <div className="card flex max-h-[90vh] w-full max-w-3xl flex-col" onClick={(ev) => ev.stopPropagation()}>
         <div className="flex items-center gap-2 border-b border-slate-200 p-3 dark:border-slate-800">
           <h3 className="flex-1 font-semibold">📄 {d?.title ?? doc.doc_id}</h3>
-          <a className="btn-ghost" href={pdfUrl} target="_blank" rel="noreferrer">Open PDF</a>
+          {pdfUrl && <a className="btn-ghost" href={pdfUrl} target="_blank" rel="noreferrer">Open PDF</a>}
           <button className="btn-ghost" onClick={onClose} aria-label="close">✕</button>
         </div>
         <div className="overflow-auto bg-cream-200/60 p-6 dark:bg-stone-950">

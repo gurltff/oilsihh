@@ -61,3 +61,13 @@ pages those events were reported in. Replace `app/field.py` / `db.seed` with a r
 - **OCR**: PDFs use their text layer. Scanned images need `pytesseract`, Pillow and the `tesseract` binary.
 - **PostGIS**: distances use haversine in Python. To switch, move `wells` to a `geography(Point)` column and replace
   `wells_within` with `ST_DWithin`.
+
+## Live demo (GitHub Pages)
+
+https://gurltff.github.io/oilsihh/
+
+Pages can only host static files, so the demo is a static build (`VITE_STATIC=1`). `backend/scripts/export_static.py`
+pre-exports the API responses to JSON, and `frontend/src/lib/staticApi.ts` runs look-ahead alerts, similarity
+re-weighting, knowledge-base search and cited RAG in the browser. Document ingestion, fine-tuning and per-page PDFs
+need the FastAPI server, so run the app locally for those. `.github/workflows/pages.yml` rebuilds and republishes the
+site on every push.
