@@ -4,18 +4,53 @@
 
 :root { color-scheme: light; }
 .dark { color-scheme: dark; }
-/* OLED field mode: pure black, max contrast, no gradients */
-.oled body, .oled .card { background: #000 !important; }
-.oled .card { border-color: #3a3a3a !important; }
-.oled { --tw-text-opacity: 1; }
+html { scroll-behavior: smooth; }
 
-body { @apply bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100; font-family: Inter, system-ui, sans-serif; }
-.card { @apply rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900; }
-.btn { @apply rounded-lg px-3 py-1.5 text-sm font-medium transition disabled:opacity-50; }
-.btn-primary { @apply btn bg-oil-500 text-white hover:bg-oil-700; }
-.btn-ghost { @apply btn border border-slate-300 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800; }
-.input { @apply rounded-lg border border-slate-300 bg-white px-2 py-1 text-sm dark:border-slate-700 dark:bg-slate-800; }
-.label { @apply text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400; }
-.leaflet-container { height: 100%; width: 100%; border-radius: 0.75rem; }
-@keyframes pulse-red { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,.6);} 50% { box-shadow: 0 0 0 10px rgba(220,38,38,0);} }
-.pulse { animation: pulse-red 1.6s infinite; }
+body {
+  @apply bg-cream-100 text-[#2b2724] antialiased dark:bg-[#161412] dark:text-stone-100;
+  transition: background-color .5s ease, color .5s ease;
+}
+h1, h2, h3 { @apply font-serif font-normal tracking-tight; }
+h2 { @apply text-lg; }
+
+/* OLED field mode: pure black, max contrast */
+.oled body, .oled .card, .oled header { background: #000 !important; }
+.oled .card { border-color: #2a2a2a !important; box-shadow: none !important; }
+
+.card {
+  @apply rounded-3xl border border-white/70 bg-cream-50 shadow-soft dark:border-stone-800 dark:bg-[#1f1c19];
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, background-color .5s ease, border-color .5s ease;
+}
+.card:hover { @apply shadow-lift; }
+
+.btn { @apply rounded-xl px-3 py-1.5 text-sm font-medium transition-all duration-200 active:scale-[.97] disabled:opacity-50; }
+.btn-primary { @apply btn bg-oil-500 text-cream-50 hover:bg-oil-900 hover:shadow-lift dark:bg-cream-100 dark:text-oil-900 dark:hover:bg-white; }
+.btn-ghost { @apply btn border border-stone-300/80 bg-white/40 hover:bg-white dark:border-stone-700 dark:bg-transparent dark:hover:bg-stone-800; }
+.input { @apply rounded-xl border border-stone-300/70 bg-white/70 px-3 py-1.5 text-sm outline-none transition focus:border-stone-500 focus:ring-4 focus:ring-stone-300/30 dark:border-stone-700 dark:bg-stone-900; }
+.label { @apply text-[11px] font-medium uppercase tracking-[.14em] text-stone-500 dark:text-stone-400; }
+
+/* segmented pill controls (like the reference's bottom bar) */
+.seg { @apply relative flex rounded-full bg-cream-200/80 p-1 dark:bg-stone-800/80; }
+.seg-item { @apply rounded-full px-4 py-1.5 text-sm text-stone-500 transition-all duration-300 ease-out hover:text-stone-900 dark:hover:text-white; }
+.seg-on { @apply bg-cream-50 text-stone-900 shadow-soft dark:bg-stone-600 dark:text-white; }
+.pill-select { @apply cursor-pointer rounded-full border-0 bg-cream-200/80 px-4 py-2 text-sm outline-none transition hover:bg-cream-200 dark:bg-stone-800; }
+
+/* page / panel entrance */
+@keyframes fade-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.animate-in { animation: fade-up .45s cubic-bezier(.2,.8,.2,1) both; }
+.animate-in > * { animation: fade-up .5s cubic-bezier(.2,.8,.2,1) both; }
+.animate-in > *:nth-child(2) { animation-delay: .06s; }
+.animate-in > *:nth-child(3) { animation-delay: .12s; }
+.animate-in > *:nth-child(4) { animation-delay: .18s; }
+@media (prefers-reduced-motion: reduce) { .animate-in, .animate-in > *, .card { animation: none !important; transition: none !important; } }
+
+/* map: warm paper tint so tiles sit in the cream palette */
+.leaflet-container { height: 100%; width: 100%; border-radius: 1.25rem; background: #efe8dc; font-family: Inter, sans-serif; }
+.leaflet-tile-pane { filter: sepia(.18) saturate(.85) brightness(1.02); }
+.dark .leaflet-tile-pane { filter: invert(.9) hue-rotate(180deg) sepia(.25) brightness(.9); }
+.leaflet-bar a { @apply !rounded-full !border-0; }
+.leaflet-bar { @apply !rounded-full !border-0 overflow-hidden shadow-soft; }
+
+mark.hl { background: #f6ecc0; }
+@keyframes pulse-red { 0%,100% { box-shadow: 0 0 0 0 rgba(179,18,46,.45);} 50% { box-shadow: 0 0 0 10px rgba(179,18,46,0);} }
+.pulse { animation: pulse-red 1.8s infinite; }

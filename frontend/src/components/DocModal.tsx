@@ -26,23 +26,23 @@ export default function DocModal({ doc, onClose }: { doc: DocRef | null; onClose
   const s = doc.start ?? 0, e = doc.end ?? 0;
   const pdfUrl = api.url(`/api/documents/${doc.doc_id}/pdf${doc.start != null ? `?hl_start=${s}&hl_end=${e}` : ""}`);
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/60 p-4" onClick={onClose} role="dialog" aria-modal>
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-stone-900/30 p-4 backdrop-blur-sm animate-in" onClick={onClose} role="dialog" aria-modal>
       <div className="card flex max-h-[90vh] w-full max-w-3xl flex-col" onClick={(ev) => ev.stopPropagation()}>
         <div className="flex items-center gap-2 border-b border-slate-200 p-3 dark:border-slate-800">
           <h3 className="flex-1 font-semibold">📄 {d?.title ?? doc.doc_id}</h3>
           <a className="btn-ghost" href={pdfUrl} target="_blank" rel="noreferrer">Open PDF</a>
           <button className="btn-ghost" onClick={onClose} aria-label="close">✕</button>
         </div>
-        <div className="overflow-auto bg-slate-200 p-6 dark:bg-slate-950">
+        <div className="overflow-auto bg-cream-200/60 p-6 dark:bg-stone-950">
           {err && <p className="text-red-600">{err}</p>}
           {d && (
-            <div className="mx-auto max-w-2xl bg-white p-8 font-mono text-[12px] leading-6 text-slate-900 shadow-lg">
+            <div className="mx-auto max-w-2xl rounded-2xl bg-cream-50 p-10 font-serif text-[14px] leading-7 text-stone-900 shadow-soft">
               <div className="mb-3 flex justify-between border-b pb-1 text-[10px] text-slate-500">
                 <span>{d.doc_type} · {d.well_id}</span><span>Page {d.page}</span>
               </div>
-              <pre className="whitespace-pre-wrap">
+              <pre className="whitespace-pre-wrap font-serif">
                 {d.text.slice(0, s)}
-                {e > s && <mark ref={mark} className="rounded-sm bg-yellow-200 outline outline-2 outline-red-500">{d.text.slice(s, e)}</mark>}
+                {e > s && <mark ref={mark} className="rounded-md bg-[#f6ecc0] px-0.5 shadow-[0_0_0_3px_#f6ecc0] transition-colors duration-700">{d.text.slice(s, e)}</mark>}
                 {d.text.slice(e > s ? e : s)}
               </pre>
             </div>

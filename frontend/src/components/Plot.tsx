@@ -36,5 +36,5 @@ export default function Plot({ data, layout, config, className, onClick }: Props
 export const darkLayout = (dark: boolean): Partial<Plotly.Layout> => ({
   paper_bgcolor: "rgba(0,0,0,0)",
   plot_bgcolor: "rgba(0,0,0,0)",
-  font: { color: dark ? "#cbd5e1" : "#334155", size: 11 },
+  font: { color: dark ? "#d6d3d1" : "#57534e", size: 11, family: "Inter, system-ui, sans-serif" },
 });

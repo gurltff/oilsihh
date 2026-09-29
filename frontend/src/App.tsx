@@ -113,40 +113,44 @@ export default function App() {
   const tabs: [Tab, string][] = [["overview", tr("overview", lang)], ["ask", tr("ask", lang)], ["kb", tr("kb", lang)], ["ingest", tr("ingest", lang)], ["3d", tr("view3d", lang)]];
 
   return (
-    <div className="min-h-screen pb-24">
-      <header className="sticky top-0 z-[1000] flex flex-wrap items-center gap-3 bg-oil-900 px-4 py-2 text-white shadow dark:bg-black">
-        <div>
-          <div className="text-lg font-black tracking-tight">eRTMAC-NWIS <span className="text-oil-accent">●</span></div>
-          <div className="text-[11px] text-slate-300">{tr("title", lang)} · Oil India Limited · {target?.name ?? TARGET_ID}</div>
-        </div>
-        <div className="ml-auto flex flex-wrap items-center gap-2">
-          <div className="flex overflow-hidden rounded-lg border border-slate-600" role="tablist" aria-label="role">
-            {(["driller", "geologist", "manager"] as Role[]).map((r) => (
-              <button key={r} onClick={() => { setRole(r); setTab("overview"); }}
-                className={`px-3 py-1 text-sm ${role === r ? "bg-oil-accent font-bold text-black" : "hover:bg-oil-700"}`}>{tr(r, lang)}</button>
-            ))}
+    <div className="min-h-screen pb-28">
+      <header className="sticky top-0 z-[1000] border-b border-slate-200/60 bg-[#f4efe7]/85 backdrop-blur-xl transition-colors duration-500 dark:border-slate-800/60 dark:bg-[#161412]/85">
+        <div className="mx-auto flex max-w-[1600px] flex-wrap items-end gap-4 px-5 pb-3 pt-5">
+          <div className="animate-in">
+            <h1 className="font-serif text-3xl tracking-tight md:text-4xl">Nearby Wells</h1>
+            <p className="mt-1 text-sm text-slate-500">{tr("title", lang)} · {target?.name ?? TARGET_ID}</p>
           </div>
-          <select aria-label="language" className="rounded bg-oil-700 px-2 py-1 text-sm" value={lang} onChange={(e) => setLang(e.target.value as Lang)}>
-            {(Object.keys(LANG_LABEL) as Lang[]).map((l) => <option key={l} value={l}>{LANG_LABEL[l]}</option>)}
-          </select>
-          <select aria-label="theme" className="rounded bg-oil-700 px-2 py-1 text-sm" value={theme} onChange={(e) => setTheme(e.target.value as Theme)}>
-            <option value="light">☀ Light</option><option value="dark">🌙 Dark</option><option value="oled">⬛ OLED field</option>
-          </select>
-          <a className="btn bg-oil-accent text-black hover:brightness-110" href={api.url(`/api/report/prespud.pdf?well_id=${TARGET_ID}&radius_km=${radiusKm}`)}>
-            ⬇ {tr("prespud", lang)}
-          </a>
+          <div className="ml-auto flex flex-wrap items-center gap-2">
+            <div className="seg" role="tablist" aria-label="role">
+              {(["driller", "geologist", "manager"] as Role[]).map((r) => (
+                <button key={r} onClick={() => { setRole(r); setTab("overview"); }} className={`seg-item ${role === r ? "seg-on" : ""}`}>{tr(r, lang)}</button>
+              ))}
+            </div>
+            <select aria-label="language" className="pill-select" value={lang} onChange={(e) => setLang(e.target.value as Lang)}>
+              {(Object.keys(LANG_LABEL) as Lang[]).map((l) => <option key={l} value={l}>{LANG_LABEL[l]}</option>)}
+            </select>
+            <div className="seg" aria-label="theme">
+              {([["light", "☀"], ["dark", "☾"], ["oled", "●"]] as [Theme, string][]).map(([k, icon]) => (
+                <button key={k} title={k} onClick={() => setTheme(k)} className={`seg-item !px-3 ${theme === k ? "seg-on" : ""}`}>{icon}</button>
+              ))}
+            </div>
+            <a className="btn-primary flex items-center gap-2 !rounded-full !px-4 !py-2" href={api.url(`/api/report/prespud.pdf?well_id=${TARGET_ID}&radius_km=${radiusKm}`)}>
+              {tr("prespud", lang)} <span aria-hidden>›</span>
+            </a>
+          </div>
         </div>
+        {role !== "driller" && (
+          <nav className="mx-auto flex max-w-[1600px] px-5 pb-3">
+            <div className="seg overflow-x-auto">
+              {tabs.map(([k, label]) => (
+                <button key={k} onClick={() => setTab(k)} className={`seg-item whitespace-nowrap ${tab === k ? "seg-on" : ""}`}>{label}</button>
+              ))}
+            </div>
+          </nav>
+        )}
       </header>
 
-      {role !== "driller" && (
-        <nav className="flex gap-1 overflow-x-auto border-b border-slate-200 bg-white px-4 dark:border-slate-800 dark:bg-slate-900">
-          {tabs.map(([k, label]) => (
-            <button key={k} onClick={() => setTab(k)} className={`whitespace-nowrap border-b-2 px-3 py-2 text-sm ${tab === k ? "border-oil-500 font-semibold" : "border-transparent text-slate-500"}`}>{label}</button>
-          ))}
-        </nav>
-      )}
-
-      <main className="mx-auto max-w-[1600px] space-y-3 p-3">
+      <main key={`${role}-${tab}`} className="animate-in mx-auto max-w-[1600px] space-y-4 p-5">
         {role === "driller" && (
           <>
             <LookAhead data={look} lang={lang} role={role} offline={offline} onOpenDoc={openDoc} />

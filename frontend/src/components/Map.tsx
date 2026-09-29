@@ -31,7 +31,7 @@ function surfacePath(w: Well): [number, number][] {
 
 function Recenter({ target }: { target?: Well }) {
   const map = useMap();
-  useEffect(() => { if (target) map.setView([target.lat, target.lon], map.getZoom()); }, [target, map]);
+  useEffect(() => { if (target) map.flyTo([target.lat, target.lon], map.getZoom(), { duration: 0.8 }); }, [target, map]);
   return null;
 }
 
@@ -43,20 +43,20 @@ export default function WellMap({ wells, target, radiusKm, setRadiusKm, selected
       <div className="mb-2 flex flex-wrap items-center gap-3">
         <span className="label">{tr("radius", lang)}</span>
         <input aria-label="radius" type="range" min={1} max={15} step={0.5} value={radiusKm}
-          onChange={(e) => setRadiusKm(Number(e.target.value))} className="flex-1 accent-oil-500" />
+          onChange={(e) => setRadiusKm(Number(e.target.value))} className="flex-1 accent-stone-800" />
         <span className="w-16 text-right font-mono text-sm">{radiusKm.toFixed(1)} km</span>
         <span className="text-xs text-slate-500">{wells.filter((w) => w.in_radius && !w.is_target).length} offset wells</span>
       </div>
       <div className="relative min-h-[300px] flex-1">
-        <MapContainer center={[target.lat, target.lon]} zoom={11} scrollWheelZoom>
+        <MapContainer center={[target.lat, target.lon]} zoom={11} scrollWheelZoom zoomAnimation fadeAnimation markerZoomAnimation>
           <Recenter target={target} />
-          <TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <TileLayer attribution='&copy; OpenStreetMap contributors &copy; CARTO' url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" subdomains="abcd" />
           <Circle center={[target.lat, target.lon]} radius={radiusKm * 1000}
-            pathOptions={{ color: "#1f5aa6", weight: 1.5, fillOpacity: 0.06, dashArray: "6 4" }} />
+            pathOptions={{ color: "#2f2b28", weight: 1.5, fillOpacity: 0.06, dashArray: "6 4" }} />
           {wells.map((w) => {
             const isSel = selected.includes(w.id);
             const isActive = active === w.id;
-            const color = w.is_target ? "#b3122e" : !w.in_radius ? "#94a3b8" : isSel ? "#f2a900" : "#1f5aa6";
+            const color = w.is_target ? "#b3122e" : !w.in_radius ? "#94a3b8" : isSel ? "#f2a900" : "#2f2b28";
             return (
               <div key={w.id}>
                 {(w.is_target || isSel || isActive) && (
@@ -77,9 +77,9 @@ export default function WellMap({ wells, target, radiusKm, setRadiusKm, selected
             );
           })}
         </MapContainer>
-        <div className="absolute bottom-2 left-2 z-[500] rounded bg-white/90 px-2 py-1 text-[11px] text-slate-700 shadow">
+        <div className="absolute bottom-2 left-2 z-[500] rounded-full bg-cream-50/90 px-3 py-1 text-[11px] text-stone-700 shadow-soft backdrop-blur">
           <span className="mr-2"><span className="inline-block h-2 w-2 rounded-full bg-[#b3122e]" /> Target</span>
-          <span className="mr-2"><span className="inline-block h-2 w-2 rounded-full bg-[#1f5aa6]" /> In radius</span>
+          <span className="mr-2"><span className="inline-block h-2 w-2 rounded-full bg-[#2f2b28]" /> In radius</span>
           <span className="mr-2"><span className="inline-block h-2 w-2 rounded-full bg-[#f2a900]" /> In correlation</span>
           <span><span className="inline-block h-2 w-2 rounded-full bg-slate-400" /> Outside</span>
         </div>

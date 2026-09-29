@@ -31,23 +31,23 @@ export default function ReplayBar({ stream, index, setIndex, playing, setPlaying
 
   const cur = stream[index];
   return (
-    <div className="fixed bottom-3 left-1/2 z-[1500] flex w-[min(960px,95vw)] -translate-x-1/2 flex-wrap items-center gap-3 rounded-2xl border border-slate-700 bg-slate-900/95 px-4 py-2 text-white shadow-2xl">
-      <span className="flex items-center gap-1 text-xs font-bold text-red-400">
+    <div className="fixed bottom-3 left-1/2 z-[1500] flex w-[min(960px,95vw)] -translate-x-1/2 flex-wrap items-center gap-3 rounded-full border border-white/70 bg-cream-50/90 px-5 py-2.5 text-stone-800 shadow-lift backdrop-blur-xl transition-all duration-500 dark:border-stone-700 dark:bg-stone-900/90 dark:text-stone-100">
+      <span className="flex items-center gap-1 text-xs font-bold text-[#b3122e]">
         <span className={`h-2 w-2 rounded-full ${playing ? "animate-pulse bg-red-500" : "bg-slate-500"}`} /> REPLAY
       </span>
-      <button className="btn bg-oil-500 hover:bg-oil-700" onClick={() => setPlaying(!playing)} aria-label={playing ? "pause" : "play"}>
+      <button className="btn-primary !rounded-full !px-4" onClick={() => setPlaying(!playing)} aria-label={playing ? "pause" : "play"}>
         {playing ? "❚❚ Pause" : "▶ Play"}
       </button>
-      <div className="flex overflow-hidden rounded-lg border border-slate-600">
+      <div className="flex overflow-hidden seg !p-0.5">
         {[1, 5, 10].map((s) => (
-          <button key={s} onClick={() => setSpeed(s)} className={`px-2 py-1 text-xs ${speed === s ? "bg-oil-accent text-black" : "hover:bg-slate-700"}`}>{s}x</button>
+          <button key={s} onClick={() => setSpeed(s)} className={`text-xs ${speed === s ? "seg-on" : ""} seg-item !px-3 !py-1`}>{s}x</button>
         ))}
       </div>
       <input aria-label="scrub depth" type="range" min={0} max={Math.max(0, stream.length - 1)} value={index}
-        onChange={(e) => setIndex(Number(e.target.value))} className="min-w-[160px] flex-1 accent-amber-400" />
+        onChange={(e) => setIndex(Number(e.target.value))} className="min-w-[160px] flex-1 accent-stone-800" />
       <span className="w-24 text-right font-mono text-sm">{cur ? `${cur.md.toFixed(0)} m` : "—"}</span>
       {cur && (
-        <span className="hidden font-mono text-[11px] text-slate-300 lg:inline">
+        <span className="hidden font-mono text-[11px] text-stone-500 lg:inline">
           ROP {cur.rop} · SPP {cur.spp_psi} · TQ {cur.torque_kftlb} · Gas {cur.gas_ppm}
         </span>
       )}
