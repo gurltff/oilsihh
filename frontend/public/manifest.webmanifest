@@ -1,0 +1,2 @@
+{ "name": "eRTMAC-NWIS Nearby Wells Intelligence", "short_name": "NWIS", "start_url": "/", "display": "standalone",
+  "background_color": "#000000", "theme_color": "#0c1e3c", "icons": [] }
